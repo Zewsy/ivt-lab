@@ -89,7 +89,7 @@ public class GT4500 implements SpaceShip {
         }
 
         firingSuccess = fireSuccessWithPrimary || fireSuccessWithSecondary;
-
+        //EDITED LINE IN FILE B
         break;
     }
 
