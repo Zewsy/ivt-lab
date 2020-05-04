@@ -6,7 +6,9 @@
 	<version>0.5.0-SNAPSHOT</version>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.projectKey>Zewsy_ivt-lab</sonar.projectKey>
+		<sonar.organization>zewsy</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencies>
