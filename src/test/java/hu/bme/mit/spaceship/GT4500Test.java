@@ -1,6 +1,8 @@
 package hu.bme.mit.spaceship;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -140,6 +142,54 @@ public class GT4500Test {
     verify(mockPrimaryTorpedoStore, times(1)).fire(1);
     verify(mockSecondaryTorpedoStore, never()).fire(1);
     Assert.assertEquals(true, result);
+  }
+
+  @Test
+  public void fireTorpedo_Single_FireTwice_When_FirstStoreHasOnlyOneShot(){
+    //Arrange
+    when(mockPrimaryTorpedoStore.fire(1)).thenReturn(true, false);
+    when(mockPrimaryTorpedoStore.isEmpty()).thenReturn(false, true);
+    when(mockSecondaryTorpedoStore.isEmpty()).thenReturn(true);
+
+    //Act
+    boolean firstFireResult = ship.fireTorpedo(FiringMode.SINGLE);
+    boolean secondFireResult = ship.fireTorpedo(FiringMode.SINGLE);
+
+    //Assert
+    verify(mockPrimaryTorpedoStore, times(1)).fire(1);
+    verify(mockSecondaryTorpedoStore, never()).fire(1);
+    Assert.assertEquals(true, firstFireResult);
+    Assert.assertEquals(false, secondFireResult);
+  }
+
+  @Test
+  public void fireTorpedo_All_Success_When_FirstStoreIsEmpty(){
+    //Arrange
+    when(mockPrimaryTorpedoStore.isEmpty()).thenReturn(true);
+    when(mockSecondaryTorpedoStore.fire(1)).thenReturn(true);
+
+    //Act
+    boolean result = ship.fireTorpedo(FiringMode.ALL);
+
+    //Assert
+    verify(mockPrimaryTorpedoStore, never()).fire(1);
+    verify(mockSecondaryTorpedoStore, times(1)).fire(1);
+    Assert.assertEquals(true, result);
+  }
+
+  @Test
+  public void fireTorpedo_All_Failure_When_StoresAreEmpty(){
+    //Arrange
+    when(mockPrimaryTorpedoStore.isEmpty()).thenReturn(true);
+    when(mockSecondaryTorpedoStore.isEmpty()).thenReturn(true);
+
+    //Act
+    boolean result = ship.fireTorpedo(FiringMode.ALL);
+
+    //Assert
+    verify(mockPrimaryTorpedoStore, never()).fire(1);
+    verify(mockSecondaryTorpedoStore, never()).fire(1);
+    Assert.assertEquals(false, result);
   }
 
 }
